@@ -1,0 +1,24 @@
+Windows:
+
+zookeeper-server-start <KAFKA_DIR>\zookeeper.properties
+
+kafka-server-start <KAFKA_DIR>\server.properties
+
+Mac:
+
+brew install kafka
+
+/usr/local/Cellar/kafka/<version>/
+/usr/local/etc/kafka/
+
+zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties
+
+kafka-server-start /usr/local/etc/kafka/server.properties
+
+Linux:
+
+tar -xzf kafka_2.13-2.8.0.tgz
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+bin/kafka-server-start.sh config/server.properties
