@@ -42,3 +42,28 @@ kafka-topics --delete --bootstrap-server localhost:9092 --topic first-topic
 **Note:**
 For delete add the following in kafka `server.properties`
 `delete.topic.enable=true`
+
+### Consume Message using deserialization option
+```sh
+#https://developer.confluent.io/tutorials/kafka-console-consumer-primitive-keys-values/kafka.html
+kafka-console-consumer --topic example --bootstrap-server localhost:9092 \
+ --from-beginning \
+ --property print.key=true \
+ --property key.separator=" : " \
+ --max-messages 10 \
+ --key-deserializer "org.apache.kafka.common.serialization.StringDeserializer" \
+ --value-deserializer "org.apache.kafka.common.serialization.IntegerDeserializer"
+#-----------------------
+kafka-console-consumer --topic orders --bootstrap-server localhost:9092 --from-beginning --property print.key=true
+
+#Print key and value
+kafka-console-consumer --topic orders --bootstrap-server localhost:9092 --from-beginning --property print.key=true  --value-deserializer "org.apache.kafka.common.serialization.IntegerDeserializer"
+#output
+MacBookPro	10
+MacBookPro	10
+MacBookPro	10
+MacBookPro	10
+MacBookPro	10
+MacBookPro	10
+MacBookPro	10
+```
