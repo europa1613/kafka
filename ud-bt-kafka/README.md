@@ -125,6 +125,67 @@ arvins-mac @ ~
 #### Schema Registry - Local
 - http://localhost:8081/schemas
 
-
+### Maven Config 
+##### See full [pom.xml](orderproducer/pom.xml)
+#### Configure Confluent Maven Repository
+```xml
+<repositories>
+	<repository>
+		<id>confluent</id>
+		<url>https://packages.confluent.io/maven/</url>
+		<releases>
+			<enabled>true</enabled>
+		</releases>
+		<snapshots>
+			<enabled>true</enabled>
+		</snapshots>
+	</repository>
+</repositories>
+```
+#### Add Maven Dependencies - `avro`, `kafka-avro-serializer` & `avro-maven-plugin`
+```xml
+<!-- https://mvnrepository.com/artifact/org.apache.avro/avro -->
+<dependency>
+    <groupId>org.apache.avro</groupId>
+    <artifactId>avro</artifactId>
+    <version>1.11.3</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer -->
+<dependency>
+    <groupId>io.confluent</groupId>
+    <artifactId>kafka-avro-serializer</artifactId>
+    <version>7.5.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.avro/avro-maven-plugin -->
+<dependency>
+    <groupId>org.apache.avro</groupId>
+    <artifactId>avro-maven-plugin</artifactId>
+    <version>1.11.3</version>
+</dependency>
+```
+#### Add Maven Build Plugin - `avro-maven-plugin`
+```xml
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro-maven-plugin</artifactId>
+			<version>1.11.3</version>
+			<executions>
+				<execution>
+					<phase>generate-sources</phase>
+					<goals>
+						<goal>schema</goal>
+					</goals>
+					<configuration>
+						<sourceDirectory>${project.basedir}/src/main/resources/</sourceDirectory>
+						<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
+```
 
 
