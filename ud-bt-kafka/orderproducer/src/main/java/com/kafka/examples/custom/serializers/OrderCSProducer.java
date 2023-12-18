@@ -11,11 +11,13 @@ public class OrderCSProducer {
         props.put("bootstrap.servers", "localhost:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "com.kafka.examples.custom.serializers.OrderSerializer");
+        props.put("partitioner.class", OrderPartitioner.class.getName());
 
-        Order order = new Order("Doe, John", "iPhone", 5);
+        Order order = new Order("Doe, Johnn", "iPhone", 5);
 
         try (KafkaProducer<String, Order> producer = new KafkaProducer<>(props)) {
-            ProducerRecord<String, Order> record = new ProducerRecord<>("orders-cs", order.getCustomer(), order);
+//            ProducerRecord<String, Order> record = new ProducerRecord<>("orders-cs", order.getCustomer(), order);
+            ProducerRecord<String, Order> record = new ProducerRecord<>("orders-partitioned", order.getCustomer(), order);
             //async send
             producer.send(record, (metadata, e) -> {
                 System.out.println("OrderCSProduce:.metadata: " + metadata);

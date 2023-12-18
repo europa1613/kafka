@@ -36,7 +36,6 @@ kafka-console-consumer --bootstrap-server localhost:9092 --topic first-topic
 kafka-console-producer --broker-list localhost:9092 --topic first-topic
 
 kafka-topics --delete --bootstrap-server localhost:9092 --topic first-topic    
-
 ```                       
 
 **Note:**
@@ -227,4 +226,30 @@ public class OrderAvroProducer {
     }
 }
 ```
+### Advanced Producer Configuration
+```sh
+zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties
+kafka-server-start /usr/local/etc/kafka/server.properties
+
+kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 10 --topic orders-partitioned
+kafka-topics --list --bootstrap-server localhost:9092
+
+arvins-mac @ ~
+ [6] → kafka-topics --describe --topic orders-partitioned --bootstrap-server localhost:9092
+Topic: orders-partitioned	TopicId: 73UOL1AYS9qiStJL7UqG4Q	PartitionCount: 10	ReplicationFactor: 1	Configs:
+	Topic: orders-partitioned	Partition: 0	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 1	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 2	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 3	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 4	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 5	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 6	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 7	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 8	Leader: 0	Replicas: 0	Isr: 0
+	Topic: orders-partitioned	Partition: 9	Leader: 0	Replicas: 0	Isr: 0
+
+
+```
+
+
 

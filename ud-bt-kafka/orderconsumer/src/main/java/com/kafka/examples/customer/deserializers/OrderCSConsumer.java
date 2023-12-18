@@ -18,12 +18,14 @@ public class OrderCSConsumer {
         props.put("group.id", "OrderGroup"); // Consumer group with scoped for each topic
 
         try (KafkaConsumer<String, Order> consumer = new KafkaConsumer<>(props)) {
-            consumer.subscribe(Collections.singletonList("orders-cs"));
+//            consumer.subscribe(Collections.singletonList("orders-cs"));
+            consumer.subscribe(Collections.singletonList("orders-partitioned"));
 
             ConsumerRecords<String, Order> records = consumer.poll(Duration.ofSeconds(30));
             for (ConsumerRecord<String, Order> record : records) {
                 System.out.println("customer: " + record.key());
                 System.out.println("Order: " + record.value());
+                System.out.println("Partition: " + record.partition());
             }
         }
     }
