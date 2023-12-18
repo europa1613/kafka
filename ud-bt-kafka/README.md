@@ -67,3 +67,37 @@ MacBookPro	10
 MacBookPro	10
 MacBookPro	10
 ```
+
+### Confluent Kafka
+- https://www.confluent.io/installation/
+- Sign up
+- Click on Installation Guide for ZIP/TAR
+```sh
+curl -O https://packages.confluent.io/archive/7.5/confluent-7.5.2.zip
+unzip unzip confluent-7.5.2.zip
+
+## Add to PATH
+# open .bash_profile (.bashrc or .zshrc)
+export CONFLUENT_HOME=$HOME/confluent-7.5.2
+export PATH=$PATH:$CONFLUENT_HOME/bin
+
+```
+
+### Start Confluent Kafka
+```sh
+confluent local services start
+#output
+    Using CONFLUENT_CURRENT: /var/folders/k4/kb60p3ts7dqd8n5n_zpqlxb80000gn/T/confluent.955162
+    Starting ZooKeeper
+    ZooKeeper is [UP]
+    Starting Kafka
+    Kafka is [UP]
+==> Error: the Confluent CLI requires Java version 1.8 or 1.11. 
+    See https://docs.confluent.io/current/installation/versions-interoperability.html .
+    If you have multiple versions of Java installed, you may need to set JAVA_HOME to the version you want Confluent to use.
+
+sdk install java 11.0.21-amzn
+
+confluent local services start
+```
+
