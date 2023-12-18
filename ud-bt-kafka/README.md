@@ -83,7 +83,9 @@ export PATH=$PATH:$CONFLUENT_HOME/bin
 
 ```
 
-### Start Confluent Kafka
+### Start/Stop Confluent Kafka (Requires JDK 8 or 11)
+- `confluent local services start`
+- `confluent local services stop`
 ```sh
 confluent local services start
 #output
@@ -99,5 +101,30 @@ confluent local services start
 sdk install java 11.0.21-amzn
 
 confluent local services start
+arvins-mac @ ~
+ [2] → confluent local services start
+ #output
+        The local commands are intended for a single-node development environment only, NOT for production usage. See more: https://docs.confluent.io/current/cli/index.html
+        As of Confluent Platform 8.0, Java 8 will no longer be supported.
+
+        Using CONFLUENT_CURRENT: /var/folders/k4/kb60p3ts7dqd8n5n_zpqlxb80000gn/T/confluent.955162
+        ZooKeeper is [UP]
+        Kafka is [UP]
+        Starting Schema Registry
+        Schema Registry is [UP]
+        Starting Kafka REST
+        Kafka REST is [UP]
+        Starting Connect
+        Connect is [UP]
+        Starting ksqlDB Server
+        ksqlDB Server is [UP]
+        Starting Control Center
+        Control Center is [UP]
 ```
+
+#### Schema Registry - Local
+- http://localhost:8081/schemas
+
+
+
 
