@@ -312,8 +312,72 @@ For a `KafkaProducer producer = new KafkaProducer(props)`
 - Create and Assign Partitions by own - `consumer.assign(Collection<TopicPartition>)`
 - Cannot Add a Simple Consumer to existing consumer group that is active and already processing records.
 
-### Offset Commit APIs
+#### Offset Commit APIs
 - Inorder to use the offset commit APIs (`commitSync()` & `commitAsync()`), `group.id` must be set in the Consumer Configuration.
 
+### Stream Processing
+#### Create Stream Topics
+```sh
+kafka-topics --create \
+    --bootstrap-server localhost:9092 \
+    --replication-factor 1 \
+    --partitions 1 \
+    --topic streams-dataflow-input
 
+kafka-topics --create \
+    --bootstrap-server localhost:9092 \
+    --replication-factor 1 \
+    --partitions 1 \
+    --topic streams-dataflow-output 
+```
+#### Define Stream
+```java
+package com.kafka.examples;
 
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.kstream.KStream;
+
+import java.util.Properties;
+
+public class DataFlowStream {
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-dataflow");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String()
+                                                                      .getClass()
+                                                                      .getName());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String()
+                                                                        .getClass()
+                                                                        .getName());
+
+        StreamsBuilder builder = new StreamsBuilder();
+        KStream<String, String> stream = builder.stream("streams-dataflow-input");
+        stream.foreach((key, value) -> System.out.println("Key: " + key + " Value: " + value));
+
+        Topology topology = builder.build();
+
+        KafkaStreams streams = new KafkaStreams(topology, props);
+        streams.start();
+
+        Runtime.getRuntime()
+               .addShutdownHook(new Thread(streams::close));
+
+    }
+}
+
+```
+
+#### Test Stream
+
+- Start above java app
+- Test with `kafka-console-producer`
+- Send messages and check Java Console
+
+```sh
+kafka-console-producer --bootstrap-server localhost:9092 --topic streams-dataflow-input
+```
