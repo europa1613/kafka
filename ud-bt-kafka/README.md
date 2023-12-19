@@ -397,4 +397,45 @@ Topologies:
       <-- KSTREAM-SOURCE-0000000000
 ```
 
+### Write to output Stream
+#### Start console producer and consumer
+```sh
+kafka-console-producer --bootstrap-server localhost:9092 --topic streams-dataflow-input
 
+kafka-console-consumer --bootstrap-server localhost:9092 \
+    --topic streams-dataflow-output \
+    --property print.key=true \
+    --property print.value=true \
+    --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
+    --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+```
+#### Write to output topic
+```java
+StreamsBuilder builder = new StreamsBuilder();
+        KStream<String, String> stream = builder.stream("streams-dataflow-input");
+        stream.foreach((key, value) -> System.out.println("Key: " + key + " Value: " + value));
+
+        //Write to output topic
+        stream.to("streams-dataflow-output");
+
+        Topology topology = builder.build();
+        System.out.println(topology.describe());
+```
+#### Test
+- Start the app
+- send message in console producer
+- check console consumer
+**New Topology**
+- FOREACH `Sink`
+- Output Topic `Sink`
+```sh
+Topologies:
+   Sub-topology: 0
+    Source: KSTREAM-SOURCE-0000000000 (topics: [streams-dataflow-input])
+      --> KSTREAM-FOREACH-0000000001, KSTREAM-SINK-0000000002
+    Processor: KSTREAM-FOREACH-0000000001 (stores: [])
+      --> none
+      <-- KSTREAM-SOURCE-0000000000
+    Sink: KSTREAM-SINK-0000000002 (topic: streams-dataflow-output)
+      <-- KSTREAM-SOURCE-0000000000
+```
