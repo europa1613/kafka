@@ -251,5 +251,23 @@ Topic: orders-partitioned	TopicId: 73UOL1AYS9qiStJL7UqG4Q	PartitionCount: 10	Rep
 
 ```
 
+#### Producer Configurtion Properties:
+- https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html
 
+### Message Delivery Idempotency - No Duplicate Messages
+Kafka Producer API along with the Broker supports 3 semantics for message delivery.
+- At least once (Default)
+- At most once
+- Only(Exactly) once - Idempotent
 
+#### Producer Transactions
+For a `KafkaProducer producer = new KafkaProducer(props)`
+- Use `ProducerConfig.TRANSACTIONAL_ID_COFIG` - producer id for `producer`.
+  - Used by broker to uniquely identify Producer to handle transactions.
+- Use `ProducerConfig.MAX_BLOCK_MS_COFIG`
+- `producer.initTransactions();`
+- `producer.beginTransaction();`
+- `producer.commitTransaction();`
+- `producer.abortTransaction();`
+- 
+  
