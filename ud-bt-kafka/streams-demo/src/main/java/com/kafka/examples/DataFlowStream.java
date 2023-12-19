@@ -24,8 +24,9 @@ public class DataFlowStream {
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, String> stream = builder.stream("streams-dataflow-input");
         stream.foreach((key, value) -> System.out.println("Key: " + key + " Value: " + value));
-        KStream<String, String> filtered = stream.filter((key, value) -> value.contains("token"));
-        filtered.to("streams-dataflow-output");
+        stream.filter((key, value) -> value.contains("token"))
+              .mapValues(value -> value.toUpperCase())
+              .to("streams-dataflow-output");
 
         Topology topology = builder.build();
         System.out.println(topology.describe());
