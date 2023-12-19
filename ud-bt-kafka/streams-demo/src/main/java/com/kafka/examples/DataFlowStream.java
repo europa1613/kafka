@@ -26,12 +26,13 @@ public class DataFlowStream {
         stream.foreach((key, value) -> System.out.println("Key: " + key + " Value: " + value));
 
         Topology topology = builder.build();
+        System.out.println(topology.describe());
 
         KafkaStreams streams = new KafkaStreams(topology, props);
-        streams.start();
+        //streams.start();
 
-        Runtime.getRuntime()
-               .addShutdownHook(new Thread(streams::close));
+//        Runtime.getRuntime()
+//               .addShutdownHook(new Thread(streams::close));
 
     }
 }

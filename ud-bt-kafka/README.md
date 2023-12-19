@@ -381,3 +381,20 @@ public class DataFlowStream {
 ```sh
 kafka-console-producer --bootstrap-server localhost:9092 --topic streams-dataflow-input
 ```
+
+#### Describe Stream Topology
+```java
+System.out.println(topology.describe());
+```
+**Output:**
+```sh
+Topologies:
+   Sub-topology: 0
+    Source: KSTREAM-SOURCE-0000000000 (topics: [streams-dataflow-input])
+      --> KSTREAM-FOREACH-0000000001
+    Processor: KSTREAM-FOREACH-0000000001 (stores: [])
+      --> none
+      <-- KSTREAM-SOURCE-0000000000
+```
+
+
