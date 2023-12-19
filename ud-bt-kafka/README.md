@@ -269,5 +269,51 @@ For a `KafkaProducer producer = new KafkaProducer(props)`
 - `producer.beginTransaction();`
 - `producer.commitTransaction();`
 - `producer.abortTransaction();`
-- 
-  
+ 
+### Consumers and Commits
+- Consumer Groups
+- One of the Brokers as Consumer Group Coordinator
+- Consumer Group Leader
+- Consumer Heartbeat with Group Coordinator
+- Consumer Group Rebalancing (Consumers join/leave)
+  - Consumer Group Lead does the Rebalancing when a consumer(s) join/leave.
+- Offset Commits - Special topic `__consumer_offsets`
+- Property `auto.commit.interval.ms`
+- Property `auto.commit.offset`. Enabled by default. Commits every 5s or the next poll.
+- `consumer.poll(duration)` along with above interval play a role in offset commit.
+- `consumer.close()` also commits offsets.
+- `consumer.commitSync()` - Blocking
+- `consumer.commitAsync()` - Non-Blocking (Overloaded)
+  -  `consumer.commitAsync()`
+  -  `consumer.commitAsync(<OffsetCommitCallback>callback)`
+  -  `consumer.commitAsync(<TopicPartition, OffsetAndMetadata><Map>, <OffsetCommitCallback>callback)`
+
+#### ConsumerRebalanceListener
+- Implement `ConsumerRebalanceListener` 
+- Two methods to implement 
+  - `onPartitionsRevoked(Collection<TopicPation>)` 
+    - Any offsets that are processed but are yet to be committed.
+    - `consumer.commitSync(currentOffsets)`
+  - `onPartitionsAssigned(Collection<TopicPation>)`
+- Pass it to subscribe
+  - `consumer.subscribe(Collection<String>topics, ConsumerRebalanceListener)`
+
+#### Consumer Configuration Properties
+- https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html
+
+#### Standalone or Simple Consumers
+- Not part of any Consumer Group
+- No rebalancing
+- `auto.offset.reset` must be set. `latest` or `earliest`.
+- No `consumer.subscribe(topics)` instead use `assign(partitions)`, see below.
+- Get the `PartitionInfo` from `consumer.partitionsFor(topicName)`
+  - If new partitions are created, this consumer will not know.
+  - There must be mechanism to know the new partitions.
+- Create and Assign Partitions by own - `consumer.assign(Collection<TopicPartition>)`
+- Cannot Add a Simple Consumer to existing consumer group that is active and already processing records.
+
+### Offset Commit APIs
+- Inorder to use the offset commit APIs (`commitSync()` & `commitAsync()`), `group.id` must be set in the Consumer Configuration.
+
+
+
