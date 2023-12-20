@@ -8,9 +8,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserProducerService {
 
-    private final KafkaTemplate<String, Integer> kafkaTemplate;
+//    private final KafkaTemplate<String, Integer> kafkaTemplate;
 
-    public void sendUser(String name, int age) {
+    private final KafkaTemplate<String, User> kafkaUserTemplate;
+
+   /* public void sendUser(String name, int age) {
         kafkaTemplate.send("users", name , age);
+    }*/
+
+    public void sendUser(User user) {
+        kafkaUserTemplate.send("users", user.getName(), user);
     }
 }

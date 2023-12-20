@@ -522,7 +522,10 @@ kafka-console-consumer --bootstrap-server localhost:9092 \
 ```
 
 
-
+### Spring Boot Kafka
+```sh
+curl -kv  -H "Content-Type: application/json" http://localhost:8080/api/users -d '{"name": "john", "age": 35, "favGenre": "Horror"}'
+```
 
 
 

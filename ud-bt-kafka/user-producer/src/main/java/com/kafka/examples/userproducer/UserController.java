@@ -1,10 +1,7 @@
 package com.kafka.examples.userproducer;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -12,9 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserProducerService service;
 
-    @PostMapping("/users/{name}/{age}")
+   /* @PostMapping("/users/{name}/{age}")
     public void sendUser(@PathVariable("name") String name, @PathVariable("age") int age) {
         service.sendUser(name, age);
+    }*/
+
+    @PostMapping("/users")
+    public void sendUser(@RequestBody User user) {
+        service.sendUser(user);
     }
 
 }
